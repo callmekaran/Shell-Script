@@ -15,10 +15,10 @@ cd "$Backup_Location"
 mkdir "$DATE"
 PGPASSWORD=qms_test pg_dump -U "$DBUser" "$DBName" | gzip  > "$Backup_Location"/"$DATE"/qms-db-"$DATE".sql.gz
 echo "DB backup done"
-################ Create zip of doc folder ##################################################
+
 cd "$Backup_Location"/"$DATE"
 tar -cvzf "$DATE"_DOCS.tar.gz "$DocLocation" 
-echo "Doc Backup done"
+echo "Application Backup done"
 
 ############### To send Mail ##############################
 if [ -e "$Backup_Location"/"$DATE"/"$DATE"_DOCS.zip ] && [ -e "$Backup_Location"/"$DATE"/qms-db-"$DATE".sql.gz ] ; then
@@ -28,3 +28,5 @@ else
 echo "fail"
 echo "$Message2" | mutt -s "Amneal Backup Failed" $user
 fi
+
+####Note: -e stands for exist, message stands for email body#####
