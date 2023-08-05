@@ -1,9 +1,0 @@
-#!/bin/bash
-avl_ram=$(free -ht | grep Mem | awk '{print $7}'| cut -c 1-2)
-
-if [ $avl_ram -ge 16 ];
-then
-        echo "Okay NP"
-else
-        echo "Ram is low"
-fi

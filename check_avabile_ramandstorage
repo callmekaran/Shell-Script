@@ -1,0 +1,18 @@
+#!/bin/bash
+avl_ram=$(free -ht | grep Mem | awk '{print $7}'| cut -c 1-2)
+
+if [ $avl_ram -ge 16 ];
+then
+        echo "Okay NP"
+else
+        echo "Ram is low"
+fi
+
+avl_strg=$(df -h /dev/sda1 | grep /dev/sda1 | awk '{print $3}' | cut -c 1-2)
+
+if [ $avl_strg -ge 70 ];
+then
+        echo "Problem due to storage is $avl_strg"
+else
+        echo "Strg is Ok"
+fi
