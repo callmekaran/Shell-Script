@@ -1,0 +1,26 @@
+#!/bin/bash
+
+<<comment
+run using bash filename.sh beacuse using sh filename.sh it is not working file 
+comment
+
+<<comment
+Script is about find file on specific location, find found thenits okay elseitwill create new one
+comment
+
+
+filepath="/home/discusit/karan/s3_2.txt"
+
+if [ -f "$filepath" ]; then
+    echo "File is present"
+else
+    echo "File is not present. Do you want to create it? (y/n)"
+    read -p "Please enter 'y' or 'n': " answer
+
+    if [ "$answer" == y ]; then
+        touch "$filepath"
+        echo "File created successfully."
+    else
+        echo "Sorry, we will not create the file."
+    fi
+fi
