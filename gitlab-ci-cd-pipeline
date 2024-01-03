@@ -1,4 +1,5 @@
-stages:         
+  
+stages:
   - build
   - deploy
 
@@ -9,21 +10,28 @@ cache:
 build-job:      
   stage: build
   script:
-    - echo "REACT_APP_API_URL=REACT_APP_API_URL_DEV" > .env
-    - echo "REACT_APP=True" >> .env
-    - npm install
-    - npm run build
-
+    - echo 'REACT_APP_API_URL="https://beta8.moontechnolabs.com/moon-map/api/api/"' > .env
+    - echo 'REACT_APP_LIVE_URL="https://beta8.moontechnolabs.com/moon-map/api/api/"' >> .env
+    - echo "GENERATE_SOURCEMAP=false" >> .env
+    - echo "REACT_APP_DEFAULTAUTH=fake" >> .env
+    - echo "PORT=3701" >> .env
+    - sudo npm install --legacy-peer-deps
+    - sudo npm run build
+    - sudo chown -R gitlab-runner:gitlab-runner .
   artifacts:
     paths:
     - build/
-
   only:
     - dev
+  tags:
+    - dev
+
 
 deploy:
   stage: 'deploy'
   script:
-    - rsync -av --exclude=.htaccess --exclude=.well-known build/ /var/www/html/moon-map/
+    - sudo rsync -av --exclude=.htaccess --exclude=.well-known build/ /var/www/html/moon-map/
   only:
+    - dev
+  tags:
     - dev
