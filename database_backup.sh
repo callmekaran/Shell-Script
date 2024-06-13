@@ -31,8 +31,19 @@ do
     # Check if mysqldump was successful
     if [ $? -eq 0 ]; then
         echo "Backup of database '$dbname' completed successfully. Output file: $outfile"
+
+        # Proceed to remove the database since the backup was successful
+        echo "Removing database: $dbname"
+        mysql -u "$MYSQL_USER" -h "$MYSQL_HOST" -p"$MYSQL_PASSWORD" -e "DROP DATABASE \`$dbname\`;" 2>/dev/null
+
+        # Check if the database removal was successful
+        if [ $? -eq 0 ]; then
+            echo "Database '$dbname' removed successfully."
+        else
+            echo "Error: Failed to remove database '$dbname'."
+        fi
     else
-        echo "Error: Backup of database '$dbname' failed. Please check the MySQL credentials and connection."
+        echo "Error: Backup of database '$dbname' failed. Database not removed."
     fi
 
 done < "$DATABASE_LIST_FILE"
