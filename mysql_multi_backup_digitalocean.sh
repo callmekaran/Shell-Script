@@ -65,3 +65,20 @@ else
 fi
 
 echo "Backup and upload process completed successfully."
+
+files_to_keep="$(s3cmd ls $AWS_BUCKET | sort -r | head -n 5 | awk '{print $4}')"
+
+# List all files in the bucket again and delete those not in the files_to_keep list
+files_to_delete=$(s3cmd ls $AWS_BUCKET | awk '{print $4}' | grep -vxF "$files_to_keep")
+
+# Check if there are files to delete
+if [ -n "$files_to_delete" ]; then
+    echo "Files to delete:"
+    echo "$files_to_delete" | while read -r file_path; do
+        # Delete the file
+        echo "Deleting $file_path"
+        s3cmd del "$file_path"
+    done
+else
+    echo "No files to delete."
+fi
