@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Define an array named PROCESSES containing the names of services to monitor
+PROCESSES=("nginx" "mysql" "ssh")
+
+# Iterate over each process name in the PROCESSES array
+for PROCESS in "${PROCESSES[@]}"; do
+    # Check if the process is not running using pgrep with the -x option for exact match
+    if ! pgrep -x "$PROCESS" > /dev/null; then
+        # If the process is not running, print a message indicating the process will be started
+        echo "$PROCESS is not running. Attempting to start..."
+        # Attempt to start the process using systemctl
+        systemctl start "$PROCESS"
+    fi
+done
