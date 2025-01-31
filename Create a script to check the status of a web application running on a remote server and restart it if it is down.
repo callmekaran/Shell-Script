@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Set the remote server details
+REMOTE_SERVER="your-server-ip-or-domain"
+WEB_URL="http://$REMOTE_SERVER"
+SERVICE_NAME="your-service-name"  # e.g., "apache2", "nginx", or any custom service
+
+# Check if the web application is up (status code 200)
+HTTP_STATUS=$(curl -o /dev/null -s -w "%{http_code}" "$WEB_URL")
+
+# Define the status threshold for a "down" application (non-2xx status codes)
+if [[ "$HTTP_STATUS" -ne 200 ]]; then
+  echo "Web application is down (HTTP status code: $HTTP_STATUS). Attempting to restart the service..."
+
+  # SSH into the remote server and restart the service
+  ssh your-username@$REMOTE_SERVER "sudo systemctl restart $SERVICE_NAME"
+
+  # Check if the restart was successful
+  if [[ $? -eq 0 ]]; then
+    echo "Service $SERVICE_NAME restarted successfully."
+  else
+    echo "Failed to restart $SERVICE_NAME. Please check the server logs."
+  fi
+else
+  echo "Web application is running (HTTP status code: $HTTP_STATUS). No action needed."
+fi
