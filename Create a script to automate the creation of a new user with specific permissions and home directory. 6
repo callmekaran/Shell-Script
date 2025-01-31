@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Check if the script is run as root
+if [  "$EUID" -ne 0 ]; then
+  echo "This script must be run as root."
+  exit 1
+fi
+
+# Prompt for username, home directory, and group
+read -p "Enter the username: " username
+read -p "Enter the home directory (absolute path): " homedir
+
+# Check if the user already exists
+if id "$username" &>/dev/null; then
+  echo "User $username already exists!"
+  exit 1
+fi
+
+# Create the user with the specified home directory and group
+useradd -m -d "$homedir" -s /bin/bash "$username"
+
+# Set permissions for the home directory (e.g., user has full access, group has read/execute)
+chmod 750 "$homedir"
+chown -R "$username" "$homedir"
+
+# Output result
+echo "User $username created successfully with home directory $homedir and group $group."
