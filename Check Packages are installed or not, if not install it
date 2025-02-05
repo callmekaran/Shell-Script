@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ $EUID -ne 0 ]; then
+echo "Login with sudo to run this script"
+exit 1;
+fi
+
+Packages=("nginx" "mysql-client")
+
+for PACKAGE in $Packages[@]; do
+
+
+if  dpkg -s $Packages ; then
+    echo "$Packages is already installed"
+else
+    echo "$Packages is not already installed"
+    apt update -y && apt install $Packages
+fi
+done
