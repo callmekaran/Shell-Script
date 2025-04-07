@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Set the container name
+CONTAINER_NAME="your_container_name"
+
+# Check if the container is running
+docker ps --filter "name=$CONTAINER_NAME" --filter "status=running" -q | grep -q . 
+
+# Check the exit status of the previous command
+if [ $? -ne 0 ]; then
+    # Container is not running, send an alert
+    echo "ALERT: Docker container '$CONTAINER_NAME' is not running!" | mail -s "Docker Container Alert" your_email@example.com
+    # You can replace the email alert with any other alerting mechanism (like Slack, custom logs, etc.)
+fi
