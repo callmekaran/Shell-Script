@@ -1,6 +1,8 @@
 #use file .my.cnf  in type 
-username=dbmainuser
-password=dbpassowrd
+[client]
+user = your_mysql_user
+password = your_mysql_password
+host = localhost
 
 #!/bin/bash
 
