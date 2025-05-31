@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo "------------------ CHECKING DISK UTILIZATION ------------------"
+
+DISK_UTIL=$(df / | awk 'NR==2 {print $5}' | sed 's/%//g')
+
+echo "Current disk usage is: $DISK_UTIL%"
+
+if [ "$DISK_UTIL" -ge 80 ]; then
+    echo "WARNING: Disk usage is above 80%!"
+else
+    echo "Disk usage is within safe limits."
+fi
